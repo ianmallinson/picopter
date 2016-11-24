@@ -46,10 +46,10 @@ while (True):
           steerdemand +=3
           setsteer(steerdemand)
         elif name=="up":
-          speeddemand +=1
+          speeddemand +=0.5
           setspeed(speeddemand)
         elif name=="down":
-          speeddemand -=1
+          speeddemand -=0.5
           setspeed(speeddemand)
         screen.fill((255,255,255))
         text=f1.render(name,True,(0,0,0))
