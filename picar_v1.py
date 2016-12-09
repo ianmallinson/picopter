@@ -1,30 +1,28 @@
 # import packages
 from RPIO import PWM
+import RPi.GPIO as GPIO
 import pygame
 from pygame.locals import *
 
 #initialise classes
 servo = PWM.Servo(0,20000,10)
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(20, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(21, GPIO.OUT, initial=GPIO.LOW)
 pygame.init()
 screen=pygame.display.set_mode((640,480),0,24)
 pygame.display.set_caption("Key Press Test")
 f1=pygame.font.SysFont("comicsansms",24)
 
 #define functions
-def setspeed(demand):
-  if demand > 0:
-    servo.set_servo(21, 0)
-    servo.stop_servo(21)
-    servo.set_servo(26, demand*2000)
-  elif demand < 0:
-    servo.set_servo(26, 0)
-    servo.stop_servo(26)
-    servo.set_servo(21, -demand*2000)
-  else:
-    servo.set_servo(21, 0)
-    servo.set_servo(26, 0)
-    servo.stop_servo(21)
-    servo.stop_servo(26)
+def setspeed(spdemand):
+  if spdemand > 0:
+    GPIO.output(20, False)
+    GPIO.output(21, True)
+  elif spdemand < 0:
+    GPIO.output(21, False)
+    GPIO.output(20, True)
+  servo.set_servo(26, abs(spdemand)*2000)
 
 def setsteer(demand): 
   servo.set_servo(13, (1500+(demand*50))) 
@@ -46,10 +44,10 @@ while (True):
           steerdemand +=3
           setsteer(steerdemand)
         elif name=="up":
-          speeddemand +=0.5
+          speeddemand +=5
           setspeed(speeddemand)
         elif name=="down":
-          speeddemand -=0.5
+          speeddemand -=5
           setspeed(speeddemand)
         screen.fill((255,255,255))
         text=f1.render(name,True,(0,0,0))
