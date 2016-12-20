@@ -5,14 +5,15 @@ import pygame
 from pygame.locals import *
 
 #initialise classes
-servo = PWM.Servo(0,20000,10)
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(20, GPIO.OUT, initial=GPIO.LOW)
+servo = PWM.Servo(0,20000,10) #cycle width of 20,000us, 10ms PW increments
+GPIO.setmode(GPIO.BCM) #use GPIO numering
+GPIO.setup(20, GPIO.OUT, initial=GPIO.LOW) #set both motor channels to LOW
 GPIO.setup(21, GPIO.OUT, initial=GPIO.LOW)
 pygame.init()
 screen=pygame.display.set_mode((640,480),0,24)
-pygame.display.set_caption("Key Press Test")
 f1=pygame.font.SysFont("comicsansms",24)
+screen.fill((255,255,255))
+pygame.display.update()
 
 #define functions
 def setspeed(spdemand):
@@ -29,6 +30,8 @@ def setsteer(demand):
 
 speeddemand=0
 steerdemand=0
+setspeed(speeddemand)
+setsteer(steerdemand)
 
 #main loop
 while (True):
@@ -44,10 +47,10 @@ while (True):
           steerdemand +=3
           setsteer(steerdemand)
         elif name=="up":
-          speeddemand +=5
+          speeddemand +=1
           setspeed(speeddemand)
         elif name=="down":
-          speeddemand -=5
+          speeddemand -=1
           setspeed(speeddemand)
         screen.fill((255,255,255))
         text=f1.render(name,True,(0,0,0))
